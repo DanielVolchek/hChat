@@ -9,6 +9,7 @@ class ChatRoom extends React.Component {
 			<div className={classes.chatModule}>
 				<span className={classes.roomTitle}>{this.props.room_desc}</span>
 				<div className={classes.groupOfMessages}>{this.props.messages}</div>
+				{this.props.scrollDiv}
 			</div>
 		);
 	}

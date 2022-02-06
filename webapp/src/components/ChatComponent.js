@@ -13,12 +13,16 @@ class ChatComponent extends React.Component {
 			messages: [],
 			inputvalue: "",
 		};
+		//Div to scroll to bottom of screen
+		this.scrollDiv = React.createRef() 
 		// function binds
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.sendToServer = this.sendToServer.bind(this);
 		this.receiveFromServer = this.receiveFromServer.bind(this);
 	}
+
+
 	connectToServer() {
 		// TODO
 		this.ws.onopen = () => {
@@ -51,15 +55,26 @@ class ChatComponent extends React.Component {
 			msg = data.substring(user_end_index + 1);
 		}
 		console.log(`received message ${msg} from server`);
-		if (msg === "END_OF_DB"){
-
+		if (msg === "END_OF_DB") {
+			const length = this.state.messages.length
+			console.log("END_OF_DB")
+			console.log(this.scrollDiv)
+			this.scrollDiv.current.scrollIntoView({ behavior: "smooth" })
 		}
 		const time = new Date();
-		const message = <Message time={time} username={user} message={msg} />;
-		this.setState({
-			...this.state,
-			messages: this.state.messages.concat(message),
-		});
+		if (this.isValidChat(rcv_msg)) {
+			const message = <Message time={time} username={user} message={msg} />;
+			this.setState({
+				...this.state,
+				messages: this.state.messages.concat(message),
+			})
+		};
+	}
+
+	isValidChat(message) {
+		// TODO
+		// placeholder
+		return true
 	}
 	validateMessage(msg) {
 		// placeholder
@@ -67,7 +82,7 @@ class ChatComponent extends React.Component {
 	}
 	processMessage(msg) {
 		return `#${this.props.room.room_num}_${this.props.username}:${msg}`;
-	} 
+	}
 	handleSubmit(event) {
 		event.preventDefault();
 		this.sendToServer(event.target[0].value);
@@ -109,6 +124,11 @@ class ChatComponent extends React.Component {
 				<ChatRoom
 					room_desc={this.props.room.room_desc}
 					messages={this.state.messages}
+					scrollDiv={
+						<div
+						ref={ this.scrollDiv }
+						></div>
+					}
 				/>
 				<MessageInput
 					handleSubmit={this.handleSubmit}

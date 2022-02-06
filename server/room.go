@@ -31,7 +31,7 @@ func AddUserToRoom(p_user *User, room_num int) (err error){
 	ROOM_MAP[room_num].conn_users = append(ROOM_MAP[room_num].conn_users, p_user)
 	log.Println("len", fmt.Sprint(len((*ROOM_MAP[room_num]).conn_users)))
 	log.Println("Added new user to room #" + fmt.Sprint(room_num))
-	
+
 	go func(){
 		messages, err := readDB(room_num)
 		if err != nil{
@@ -41,6 +41,7 @@ func AddUserToRoom(p_user *User, room_num int) (err error){
 			combined_msg := fmt.Sprintf("#%d_%s:%s", room_num, msg.username, msg.message)
 			RespondWithString(p_user, combined_msg)
 		}
+		RespondWithString(p_user, "END_OF_DB")
 	}()
 	go ReadConnOnLoop(p_user)
 	return nil
