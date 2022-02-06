@@ -51,6 +51,9 @@ class ChatComponent extends React.Component {
 			msg = data.substring(user_end_index + 1);
 		}
 		console.log(`received message ${msg} from server`);
+		if (msg === "END_OF_DB"){
+
+		}
 		const time = new Date();
 		const message = <Message time={time} username={user} message={msg} />;
 		this.setState({
@@ -64,7 +67,7 @@ class ChatComponent extends React.Component {
 	}
 	processMessage(msg) {
 		return `#${this.props.room.room_num}_${this.props.username}:${msg}`;
-	}
+	} 
 	handleSubmit(event) {
 		event.preventDefault();
 		this.sendToServer(event.target[0].value);
