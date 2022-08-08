@@ -41,7 +41,7 @@ func setupHTTPRoutes() {
 	http.HandleFunc("/", homePage)
 	http.HandleFunc("/ws", wsEndpoint)
 	log.Println("Listening on port: " + HTTP_PORT)
-	log.Fatal(http.ListenAndServe(":"+HTTP_PORT, nil))
+	log.Fatal(http.ListenAndServeTLS(":"+HTTP_PORT,"/etc/letsencrypt/live/hchat.org/cert.pem","/etc/letsencrypt/live/hchat.org/privkey.pem", nil))
 }
 
 func processWSConn(ws_conn *websocket.Conn) error {
